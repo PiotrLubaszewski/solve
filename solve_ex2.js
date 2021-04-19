@@ -62,15 +62,13 @@ const permutations = (numberArray) => {
     []
   );
 };
+
 const makeQuasiTimesFromPossiblePermutations = (possiblePermutations) => {
   return possiblePermutations.map(
     (charArr) => charArr[0] + charArr[1] + ':' + charArr[2] + charArr[3]
   );
 };
 
-const swap = (timeDigit) => {
-  return '' + timeDigit[1] + timeDigit[0];
-};
 
 const checkDigit = (prevDigit, newDigit, digitPosition) => {
   switch (digitPosition) {
@@ -128,6 +126,7 @@ const checkInputFormat = (timeStr, separatorIndex, leftDigit, rightDigit) => {
           console.error(
             'Invalid time format. SEGMENTS EXTENDS MAXIMAL TIME VALUES'
           );
+          return false;
         }
       }
     }
