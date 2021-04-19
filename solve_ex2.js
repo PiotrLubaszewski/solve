@@ -44,10 +44,6 @@ const makeQuasiTimesFromPossiblePermutations = (possiblePermutations) => {
   );
 };
 
-const swap = (timeDigit) => {
-  return '' + timeDigit[1] + timeDigit[0];
-};
-
 const checkDigit = (prevDigit, newDigit, digitPosition) => {
   switch (digitPosition) {
     case 'RIGHT':
