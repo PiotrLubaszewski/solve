@@ -2,7 +2,7 @@ const solve = (timeStr) => {
   const possibleNums = possibleNumbers(timeStr);
   const perms = permutations(possibleNums);
   const quasiTimes = makeQuasiTimesFromPossiblePermutations(perms);
-  const validTimes = quasiTimes.filter((qt) => {
+  let validTimes = quasiTimes.filter((qt) => {
     const extractedTimeData = extractDataFromString(qt);
     return checkInputFormat(
       qt,
@@ -13,6 +13,27 @@ const solve = (timeStr) => {
       ? qt
       : undefined;
   });
+
+  validTimes = validTimes.filter((vt) => {
+    console.log(vt)
+    const extractedVt = extractDataFromString(vt);
+    const extractedTimeStr = extractDataFromString(timeStr);
+    if (+extractedVt.leftDigit > +extractedTimeStr.leftDigit) {
+      return vt;
+    } else {
+      if (
+        +extractedVt.leftDigit === +extractedTimeStr.leftDigit &&
+        +extractedVt.rightDigit > +extractedTimeStr.rightDigit
+      ) {
+        return vt;
+      } else {
+        return undefined;
+      }
+    }
+  });
+  
+  console.log(validTimes)
+
   return validTimes[0];
 };
 
@@ -25,23 +46,30 @@ const extractDataFromString = (timeStr) => {
   };
 };
 
-const permutations = (numbersArray) => {
-  return numbersArray.reduce(
+const permutations = (numberArray) => {
+  if (numberArray.length <= 2)
+    return numberArray.length === 2
+      ? [numberArray, [numberArray[1], numberArray[0]]]
+      : numberArray;
+  return numberArray.reduce(
     (acc, item, i) =>
       acc.concat(
         permutations([
-          ...numbersArray.slice(0, i),
-          ...numbersArray.slice(i + 1),
+          ...numberArray.slice(0, i),
+          ...numberArray.slice(i + 1),
         ]).map((val) => [item, ...val])
       ),
     []
   );
 };
-
 const makeQuasiTimesFromPossiblePermutations = (possiblePermutations) => {
   return possiblePermutations.map(
     (charArr) => charArr[0] + charArr[1] + ':' + charArr[2] + charArr[3]
   );
+};
+
+const swap = (timeDigit) => {
+  return '' + timeDigit[1] + timeDigit[0];
 };
 
 const checkDigit = (prevDigit, newDigit, digitPosition) => {
@@ -70,7 +98,7 @@ const isNewDigitGrater = (prevDigit, newDigit) => {
 };
 
 const isDigitFormatCorrect = (maxValue, digit) => {
-  return maxValue > +digit && +digit > 0;
+  return maxValue >= +digit && +digit > 0;
 };
 
 const checkInputFormat = (timeStr, separatorIndex, leftDigit, rightDigit) => {
@@ -92,7 +120,7 @@ const checkInputFormat = (timeStr, separatorIndex, leftDigit, rightDigit) => {
         return false;
       } else {
         if (
-          isDigitFormatCorrect(24, leftDigit) &&
+          isDigitFormatCorrect(23, leftDigit) &&
           isDigitFormatCorrect(59, rightDigit)
         ) {
           return true;
