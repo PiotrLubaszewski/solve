@@ -1,7 +1,9 @@
 const solve = (timeStr) => {
+  
   const possibleNums = possibleNumbers(timeStr);
   const perms = permutations(possibleNums);
   const quasiTimes = makeQuasiTimesFromPossiblePermutations(perms);
+  
   let validTimes = quasiTimes.filter((qt) => {
     const extractedTimeData = extractDataFromString(qt);
     return checkInputFormat(
@@ -12,10 +14,7 @@ const solve = (timeStr) => {
     )
       ? qt
       : undefined;
-  });
-
-  validTimes = validTimes.filter((vt) => {
-    console.log(vt)
+  }).filter((vt) => {
     const extractedVt = extractDataFromString(vt);
     const extractedTimeStr = extractDataFromString(timeStr);
     if (+extractedVt.leftDigit > +extractedTimeStr.leftDigit) {
@@ -31,9 +30,6 @@ const solve = (timeStr) => {
       }
     }
   });
-  
-  console.log(validTimes)
-
   return validTimes[0];
 };
 
@@ -68,7 +64,6 @@ const makeQuasiTimesFromPossiblePermutations = (possiblePermutations) => {
     (charArr) => charArr[0] + charArr[1] + ':' + charArr[2] + charArr[3]
   );
 };
-
 
 const checkDigit = (prevDigit, newDigit, digitPosition) => {
   switch (digitPosition) {
@@ -106,15 +101,12 @@ const checkInputFormat = (timeStr, separatorIndex, leftDigit, rightDigit) => {
     to 23:59 -> 5 characters 
     */
   if (timeStr.length > 5 && timeStr.length < 4) {
-    console.error('Invalid time format. WRONG LENGTH');
     return false;
   } else {
     if (!(separatorIndex === 2 || separatorIndex === 1)) {
-      console.error('Invalid time format. SEPARATOR PLACE');
       return false;
     } else {
       if (+leftDigit < 0 || +rightDigit < 0) {
-        console.error('Invalid time format. NEGATIVE SEGMENTS');
         return false;
       } else {
         if (
@@ -123,12 +115,10 @@ const checkInputFormat = (timeStr, separatorIndex, leftDigit, rightDigit) => {
         ) {
           return true;
         } else {
-          console.error(
-            'Invalid time format. SEGMENTS EXTENDS MAXIMAL TIME VALUES'
-          );
           return false;
         }
       }
     }
   }
 };
+
